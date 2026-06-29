@@ -21,6 +21,15 @@ Se configuró un grupo de nodos con las siguientes características:
 - **Modelo de capacidad:** `SPOT` (reducción de costos en entorno de laboratorio)
 - **Escalado dinámico:** mínimo 1 / deseado 1 / máximo 3 nodos
 
+Horizontal Pod Autoscaler (HPA)
+Se configuró un HPA para los servicios Frontend y Backend dentro del namespace tienda:
+
+- Backend: mínimo 2 réplicas / máximo 10 réplicas, umbral de activación 70% CPU
+- Frontend: mínimo 2 réplicas / máximo 6 réplicas, umbral de activación 60% CPU
+
+Durante las pruebas de carga, el Backend escaló automáticamente de 2 a 5 réplicas
+al superar el 149% del umbral de CPU configurado, volviendo al mínimo al cesar la carga.
+
 ### IAM
 
 Se asoció el rol `LabEKSNodeRole` a los nodos para otorgarles los permisos necesarios de comunicación con la red de AWS y registro en el clúster.
@@ -144,3 +153,9 @@ La aplicación quedo disponible a traves del DNS del balanceador de carga:
 ```
 http://k8s-tienda-tiendafr-c7f81170b5-57d7efca1a54c856.elb.us-east-1.amazonaws.com
 ```
+
+Validación de comunicación Frontend → Backend
+Se verificó la comunicación entre capas cargando la URL pública en el navegador y
+confirmando mediante las herramientas de desarrollo (F12 → Network) que las peticiones
+hacia la API del Backend retornaban códigos HTTP 200 OK, con lectura y escritura de
+datos en la base de datos MySQL operando correctamente.
