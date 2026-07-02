@@ -153,7 +153,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Iniciar servidor
+// Iniciar servidor 1
 app.listen(PORT, async () => {
   console.log(`Servidor backend escuchando en puerto ${PORT}`);
   await initDb();
